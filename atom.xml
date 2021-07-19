@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>酷派技术团队</title>
+  
+  
+  <link href="http://coolpad.top/atom.xml" rel="self"/>
+  
+  <link href="http://coolpad.top/"/>
+  <updated>2021-07-19T10:00:37.348Z</updated>
+  <id>http://coolpad.top/</id>
+  
+  <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>投稿说明</title>
+    <link href="http://coolpad.top/2021/07/19/%E6%8A%95%E7%A8%BF%E8%AF%B4%E6%98%8E/"/>
+    <id>http://coolpad.top/2021/07/19/%E6%8A%95%E7%A8%BF%E8%AF%B4%E6%98%8E/</id>
+    <published>2021-07-19T10:00:37.000Z</published>
+    <updated>2021-07-19T10:00:37.348Z</updated>
+    
+    
+    
+    
+    
+  </entry>
+  
+</feed>
