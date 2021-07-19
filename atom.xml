@@ -3,18 +3,18 @@
   <title>酷派技术团队</title>
   
   
-  <link href="http://www.coolpad.top/atom.xml" rel="self"/>
+  <link href="http://coolpad.top/atom.xml" rel="self"/>
   
-  <link href="http://www.coolpad.top/"/>
+  <link href="http://coolpad.top/"/>
   <updated>2021-07-19T08:47:48.798Z</updated>
-  <id>http://www.coolpad.top/</id>
+  <id>http://coolpad.top/</id>
   
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
     <title>sample.md</title>
-    <link href="http://www.coolpad.top/2021/07/19/sample-md/"/>
-    <id>http://www.coolpad.top/2021/07/19/sample-md/</id>
+    <link href="http://coolpad.top/2021/07/19/sample-md/"/>
+    <id>http://coolpad.top/2021/07/19/sample-md/</id>
     <published>2021-07-19T08:47:48.000Z</published>
     <updated>2021-07-19T08:47:48.798Z</updated>
     
