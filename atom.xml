@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-  <title>酷派技术团队</title>
+  <title>李海洲</title>
   
   
   <link href="http://coolpad.top/atom.xml" rel="self"/>
@@ -8,6 +8,11 @@
   <link href="http://coolpad.top/"/>
   <updated>2021-07-19T10:00:37.348Z</updated>
   <id>http://coolpad.top/</id>
+  
+  <author>
+    <name>Steven Lee</name>
+    
+  </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
   
