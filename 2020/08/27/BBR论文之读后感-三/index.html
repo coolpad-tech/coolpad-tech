@@ -1,0 +1,1232 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="李海洲" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="Matching the Packet Flow to the Delivery PathThe core BBR algorithm has two parts:When an ack is received Each ack provides new RTT and average delivery rate measurements that update the RTprop and Bt">
+<meta property="og:type" content="article">
+<meta property="og:title" content="BBR论文之读后感(三)">
+<meta property="og:url" content="http://coolpad.top/2020/08/27/BBR论文之读后感-三/index.html">
+<meta property="og:site_name" content="李海洲">
+<meta property="og:description" content="Matching the Packet Flow to the Delivery PathThe core BBR algorithm has two parts:When an ack is received Each ack provides new RTT and average delivery rate measurements that update the RTprop and Bt">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://raw.githubusercontent.com/hellolihaizhou/saveImg/master/BBRpart3-1.png.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/hellolihaizhou/saveImg/master/BBRpart3-2.png.png">
+<meta property="og:updated_time" content="2020-08-27T10:59:05.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="BBR论文之读后感(三)">
+<meta name="twitter:description" content="Matching the Packet Flow to the Delivery PathThe core BBR algorithm has two parts:When an ack is received Each ack provides new RTT and average delivery rate measurements that update the RTprop and Bt">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/hellolihaizhou/saveImg/master/BBRpart3-1.png.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://coolpad.top/2020/08/27/BBR论文之读后感-三/"/>
+
+
+
+
+
+  <title>BBR论文之读后感(三) | 李海洲</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+	
+	<!--<a href="https://github.com/hellolihaizhou" class="github-corner" aria-label="View source on Github"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>-->
+	
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">李海洲</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于我
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://coolpad.top/2020/08/27/BBR论文之读后感-三/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Steven Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/background.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="李海洲">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">BBR论文之读后感(三)</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-08-27T12:53:38+08:00">
+                2020-08-27
+              </time>
+            
+
+            
+
+            
+  	    
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/网络/" itemprop="url" rel="index">
+                    <span itemprop="name">网络</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/08/27/BBR论文之读后感-三/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2020/08/27/BBR论文之读后感-三/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2,183
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  10
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Matching-the-Packet-Flow-to-the-Delivery-Path"><a href="#Matching-the-Packet-Flow-to-the-Delivery-Path" class="headerlink" title="Matching the Packet Flow to the Delivery Path"></a>Matching the Packet Flow to the Delivery Path</h1><p>The core BBR algorithm has two parts:<br>When an ack is received</p>
+<p>Each ack provides new RTT and average delivery rate measurements that update the RTprop and BtlBw estimates:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">onAck</span>(<span class="params">packet</span>)</span></span><br><span class="line"><span class="function">  <span class="title">rtt</span> = <span class="title">now</span> - <span class="title">packet</span>.<span class="title">sendtime</span></span></span><br><span class="line"><span class="function">  <span class="title">update_min_filter</span>(<span class="params">RTpropFilter, rtt</span>)</span></span><br><span class="line"><span class="function">  <span class="title">delivered</span> += <span class="title">packet</span>.<span class="title">size</span></span></span><br><span class="line"><span class="function">  <span class="title">delivered_time</span> = <span class="title">now</span></span></span><br><span class="line"><span class="function">  <span class="title">deliveryRate</span> = (<span class="params">delivered - packet.delivered</span>) / (<span class="params">delivered_time - packet.delivered_time</span>)</span></span><br><span class="line"><span class="function">  <span class="title">if</span> (<span class="params">deliveryRate &gt; BtlBwFilter.currentMax || ! packet.app_limited</span>)</span></span><br><span class="line"><span class="function">     <span class="title">update_max_filter</span>(<span class="params">BtlBwFilter, deliveryRate</span>)</span></span><br><span class="line"><span class="function">  <span class="title">if</span> (<span class="params">app_limited_until &gt; <span class="number">0</span></span>)</span></span><br><span class="line"><span class="function">     <span class="title">app_limited_until</span> = <span class="title">app_limited_until</span> - <span class="title">packet</span>.<span class="title">size</span></span></span><br></pre></td></tr></table></figure>
+<p>The if checks address the uncertainty issue described in the last paragraph: senders can be application limited, meaning the application runs out of data to fill the network. This is quite common because of request/response traffic. When there is a send opportunity but no data to send, BBR marks the corresponding bandwidth sample(s) as application limited (see send() pseudocode to follow). The code here decides which samples to include in the bandwidth model so it reflects network, not application, limits.<br>BtlBw is a hard upper bound on the delivery rate so a measured delivery rate larger than the current BtlBw estimate must mean the estimate is too low, whether or not the sample was app-limited. Otherwise, application-limited samples are discarded. (Figure 1 shows that in the app-limited region deliveryRate underestimates BtlBw. These checks prevent filling the BtlBw filter with underestimates which would cause data to be sent too slowly.)</p>
+<p><strong>翻译：</strong> </p>
+<p>BBR核心算法包含两大部分：<br>当收到一个ACK报文时：<br>每一个ACK提供了一个新的RTT和新的发送速率估计，BBR将以此为根据来更新RTprop和BtlBw<br>这里略去上面的英文中的伪代码部分<br>伪代码中的if语句是对上一段所讲的不确定性进行估计的：发送方可能受限于应用，发送数据太少，而并没有将管道填满。<br>当发送方采取的协议是request/response类时，这种现象是非常常见的。当没有数据可以发送时，BBR会将对应的带宽估计标志为是应用限制的（见下文伪代码中的send()）。这里的算法是为了决定流应该采集哪些数据，而避免采集那些被应用限制的而不是被网络限制的采集数据。<br>BtlBw是发送速率的上界，所以如果计算出的发送速率大于当前所估计的BtlBw值，那么这表示这个估计值太小了（无论该发送速率是否是应用限制的），我们都应该更新它。否则，那些被应用限制的采集数据将会被丢弃。（如图1所示，在app-limited区域中，deliveryRate低估了BtlBw。这些if判断避免BBR低估了BtlBw而导致发送低速率）。</p>
+<p><strong>额外添加:</strong><br>这里计算发送速率的伪代码算法如此的通俗易懂，当然实际的源代码肯定是很复杂的，不过任何复杂算法最初的雏形一定是像这样简单纯朴</p>
+<h1 id="When-data-is-sent"><a href="#When-data-is-sent" class="headerlink" title="When data is sent"></a>When data is sent</h1><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">To match the packet-arrival rate to the bottleneck link<span class="string">'s departure rate, BBR paces every data packet. (BBR must match the bottleneck rate, which means pacing is integral to the design and fundamental to operation—pacing_rate is BBR'</span>s primary control parameter. A secondary parameter, cwnd_gain, bounds inflight to a small multiple <span class="keyword">of</span> the BDP to handle common network and receiver pathologies (see the later section on Delayed and Stretched ACKs). Conceptually, the TCP send routine looks like the following code. (In Linux, sending uses the efficient FQ/pacing queuing discipline,<span class="number">4</span> which gives BBR line-rate single-connection performance on multigigabit links and handles thousands <span class="keyword">of</span> lower-rate paced connections <span class="keyword">with</span> negligible CPU overhead.)</span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">send</span>(<span class="params">packet</span>)</span></span><br><span class="line"><span class="function">  <span class="title">bdp</span> = <span class="title">BtlBwFilter</span>.<span class="title">currentMax</span> × <span class="title">RTpropFilter</span>.<span class="title">currentMin</span></span></span><br><span class="line"><span class="function">  <span class="title">if</span> (<span class="params">inflight &gt;= cwnd_gain × bdp</span>)</span></span><br><span class="line"><span class="function">     // <span class="title">wait</span> <span class="title">for</span> <span class="title">ack</span> <span class="title">or</span> <span class="title">retransmission</span> <span class="title">timeout</span></span></span><br><span class="line"><span class="function">     <span class="title">return</span></span></span><br><span class="line"><span class="function">  <span class="title">if</span> (<span class="params">now &gt;= nextSendTime</span>)</span></span><br><span class="line"><span class="function">     <span class="title">packet</span> = <span class="title">nextPacketToSend</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">     <span class="title">if</span> (<span class="params">! packet</span>)</span></span><br><span class="line"><span class="function">        <span class="title">app_limited_until</span> = <span class="title">inflight</span></span></span><br><span class="line"><span class="function">        <span class="title">return</span></span></span><br><span class="line"><span class="function">     <span class="title">packet</span>.<span class="title">app_limited</span> = (<span class="params">app_limited_until &gt; <span class="number">0</span></span>)</span></span><br><span class="line"><span class="function">     <span class="title">packet</span>.<span class="title">sendtime</span> = <span class="title">now</span></span></span><br><span class="line"><span class="function">     <span class="title">packet</span>.<span class="title">delivered</span> = <span class="title">delivered</span></span></span><br><span class="line"><span class="function">     <span class="title">packet</span>.<span class="title">delivered_time</span> = <span class="title">delivered_time</span></span></span><br><span class="line"><span class="function">     <span class="title">ship</span>(<span class="params">packet</span>)</span></span><br><span class="line"><span class="function">     <span class="title">nextSendTime</span> = <span class="title">now</span> + <span class="title">packet</span>.<span class="title">size</span> / (<span class="params">pacing_gain × BtlBwFilter.currentMax</span>)</span></span><br><span class="line"><span class="function">  <span class="title">timerCallbackAt</span>(<span class="params">send, nextSendTime</span>)</span></span><br></pre></td></tr></table></figure>
+<p><strong>翻译：</strong> </p>
+<p>为了使得bottleneck链路的报文到达速率和报文离开速率相等，BBR必须进行packet paced。<br>BBR的发送速率必须与bottleneck的速率相等，这意味着BBR的实现需要pacing的支持——pacing_rate是BBR的一个主要控制参数！<br>第二个参数，cwnd_gain，将inflight控制为比BDP稍大一些，从而处理常见的网络机制和接收方机制（参见后文Dealyedand Stretched ACKs）。<br>TCP发送的时候做的事大概如上面的伪代码所示（在Linux中，可以使用FQ/pacing qdisc来发送数据，这可以使得BBR在与几千个低速率的paced流在千兆链路上很好地共存，并且使用FQ这种机制也不会额外造成CPU的负担）。</p>
+<p><strong>额外添加：</strong></p>
+<p>上面说的感觉听上去上挺合理，但是很容易产生这样的疑问：<br>端到端的TCP如何知道带宽到底是多少？如果用测量的话结果具有一个RTT的滞后性。因此你测得的结果永远都是以前的结果而不是现在的结果，由于网络情况存在随机性，更无法预测未来的情景，于是乎，完全按照瓶颈带宽来发送数据是不可能的，我们不得不承认这个结果是滞后的，或者说我们采集到的信息仅仅够算一个所谓的均值，不管怎么样，我们依然会选择Pacing的方式来发送数据，至少在没有新的有别于AIMD的全新数学模型出现之前吧。<br>如此一来，只要我们选择了Pacing，那么就必然要在TCP发送端内置一套数据采集和计算引擎，这是AIMD模型所不需要的。</p>
+<h1 id="Steady-state-behavior"><a href="#Steady-state-behavior" class="headerlink" title="Steady-state behavior"></a>Steady-state behavior</h1><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">The rate and amount BBR sends is solely a <span class="function"><span class="keyword">function</span> <span class="title">of</span> <span class="title">the</span> <span class="title">estimated</span> <span class="title">BtlBw</span> <span class="title">and</span> <span class="title">RTprop</span>, <span class="title">so</span> <span class="title">the</span> <span class="title">filters</span> <span class="title">control</span> <span class="title">adaptation</span> <span class="title">in</span> <span class="title">addition</span> <span class="title">to</span> <span class="title">estimating</span> <span class="title">the</span> <span class="title">bottleneck</span> <span class="title">constraints</span>. <span class="title">This</span> <span class="title">creates</span> <span class="title">the</span> <span class="title">novel</span> <span class="title">control</span> <span class="title">loop</span> <span class="title">shown</span> <span class="title">in</span> <span class="title">figure</span> 2, <span class="title">which</span> <span class="title">illustrates</span> <span class="title">the</span> <span class="title">RTT</span> (<span class="params">blue</span>), <span class="title">inflight</span> (<span class="params">green</span>) <span class="title">and</span> <span class="title">delivery</span> <span class="title">rate</span> (<span class="params">red</span>) <span class="title">detail</span> <span class="title">from</span> 700 <span class="title">ms</span> <span class="title">of</span> <span class="title">a</span> 10-<span class="title">Mbps</span>, 40-<span class="title">ms</span> <span class="title">flow</span>. <span class="title">The</span> <span class="title">thick</span> <span class="title">gray</span> <span class="title">line</span> <span class="title">above</span> <span class="title">the</span> <span class="title">delivery</span>-<span class="title">rate</span> <span class="title">data</span> <span class="title">is</span> <span class="title">the</span> <span class="title">state</span> <span class="title">of</span> <span class="title">the</span> <span class="title">BtlBw</span> <span class="title">max</span> <span class="title">filter</span>. <span class="title">The</span> <span class="title">triangular</span> <span class="title">structures</span> <span class="title">result</span> <span class="title">from</span> <span class="title">BBR</span> <span class="title">cycling</span> <span class="title">pacing_gain</span> <span class="title">to</span> <span class="title">determine</span> <span class="title">if</span> <span class="title">BtlBw</span> <span class="title">has</span> <span class="title">increased</span>. <span class="title">The</span> <span class="title">gain</span> <span class="title">used</span> <span class="title">for</span> <span class="title">each</span> <span class="title">part</span> <span class="title">of</span> <span class="title">the</span> <span class="title">cycle</span> <span class="title">is</span> <span class="title">shown</span> <span class="title">time</span>-<span class="title">aligned</span> <span class="title">with</span> <span class="title">the</span> <span class="title">data</span> <span class="title">it</span> <span class="title">influenced</span>. <span class="title">The</span> <span class="title">gain</span> <span class="title">is</span> <span class="title">applied</span> <span class="title">an</span> <span class="title">RTT</span> <span class="title">earlier</span>, <span class="title">when</span> <span class="title">the</span> <span class="title">data</span> <span class="title">is</span> <span class="title">sent</span>. <span class="title">This</span> <span class="title">is</span> <span class="title">indicated</span> <span class="title">by</span> <span class="title">the</span> <span class="title">horizontal</span> <span class="title">jog</span> <span class="title">in</span> <span class="title">the</span> <span class="title">event</span> <span class="title">sequence</span> <span class="title">description</span> <span class="title">running</span> <span class="title">up</span> <span class="title">the</span> <span class="title">left</span> <span class="title">side</span>.</span></span><br></pre></td></tr></table></figure>
+<p><strong>翻译：</strong></p>
+<p>BBR的发送速率和发送数量完全就是一个关于BtlBw和RTprop的函数，所以BBR应该小心地估计这两个值。这创造了一种新型的闭环控制，如图2所示。图2显示了一个10Mbps，40ms的流在700ms中的RTT（蓝线），inflight（绿线）和发送速率（红线）变化过程。</p>
+<p>注意图中在发送速率上方的灰线是BtlBw最大化滤波器的状态。图中产生的三角形形状是因为BBR的pacing_gain周期性的变化产生的，因为BBR必须以此来探测BtlBw是否提高了。图中展示了该增益值在一个周期不同时间的变化和其影响的数据变化</p>
+<p><img src="https://raw.githubusercontent.com/hellolihaizhou/saveImg/master/BBRpart3-1.png.png" alt=""></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">BBR minimizes delay by spending most <span class="keyword">of</span> its time <span class="keyword">with</span> one BDP <span class="keyword">in</span> flight, paced at the BtlBw estimate. This moves the bottleneck to the sender so it can<span class="string">'t observe BtlBw increases. Consequently, BBR periodically spends an RTprop interval at a pacing_gain &gt; 1, which increases the sending rate and inflight. If BtlBw hasn'</span>t changed, then a queue is created at the bottleneck, increasing RTT, which keeps deliveryRate constant. (This queue is removed by sending at a compensating pacing_gain &lt; <span class="number">1</span> <span class="keyword">for</span> the next RTprop.) If BtlBw has increased, deliveryRate increases and the <span class="keyword">new</span> max immediately increases the BtlBw filter output, increasing the base pacing rate. Thus, BBR converges to the <span class="keyword">new</span> bottleneck rate exponentially fast. Figure <span class="number">3</span> shows the effect on a <span class="number">10</span>-Mbps, <span class="number">40</span>-ms flow <span class="keyword">of</span> BtlBw abruptly doubling to <span class="number">20</span> Mbps after <span class="number">20</span> seconds <span class="keyword">of</span> steady operation (left graph) then dropping to <span class="number">10</span> Mbps after another <span class="number">20</span> seconds <span class="keyword">of</span> steady operation at <span class="number">20</span> Mbps (right graph).</span><br></pre></td></tr></table></figure>
+<p><strong>翻译：</strong></p>
+<p>BBR将它的大部分时间的在外发送数据都保持为一个BDP大小，并且发送速率保持在估计得BtlBw值，这将会最小化时延。<br>但是这会把网络中的瓶颈链路移动到BBR发送方本身，所以BBR无法察觉BtlBw是否上升了。</p>
+<p>所以，BBR周期性的在一个RTprop时间内将pacing_gain设为一个大于1的值，这将会增加发送速率和在外报文。如果BtlBw没有改变，那么这意味着BBR在网络中制造了队列，增大了RTT，而deliveryRate仍然没有改变。（这个队列将会在下个RTprop周期被BBR使用小于1的pacing_gain来消除）。</p>
+<p>如果BtlBw增大了，那么deliveryRate增大了，并且BBR会立即更新BtlBw的估计值，从而增大了发送速率。通过这种机制，BBR可以以指数速度非常快地收敛到瓶颈链路。如图3显示的，我们在1条10Mbps，40ms的流在20s稳定运行之后将BtlBw提高了1倍（20Mbps），然后在第40s又将BtlBw恢复至20Mbps<br><img src="https://raw.githubusercontent.com/hellolihaizhou/saveImg/master/BBRpart3-2.png.png" alt=""></p>
+<p><strong>额外添加</strong></p>
+<p><a href="https://blog.csdn.net/dog250/article/details/52972502?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522159850579919725211953968%2522%252C%2522scm%2522%253A%252220140713.130102334.pc%255Fblog.%2522%257D&amp;request_id=159850579919725211953968&amp;biz_id=0&amp;utm_medium=distribute.pc_search_result.none-task-blog-2~blog~first_rank_v2~rank_blog_v1-13-52972502.pc_v2_rank_blog_v1&amp;utm_term=BBR&amp;spm=1018.2118.3001.4187" target="_blank" rel="noopener">https://blog.csdn.net/dog250/article/details/52972502?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522159850579919725211953968%2522%252C%2522scm%2522%253A%252220140713.130102334.pc%255Fblog.%2522%257D&amp;request_id=159850579919725211953968&amp;biz_id=0&amp;utm_medium=distribute.pc_search_result.none-task-blog-2~blog~first_rank_v2~rank_blog_v1-13-52972502.pc_v2_rank_blog_v1&amp;utm_term=BBR&amp;spm=1018.2118.3001.4187</a></p>
+<p>(BBR is a simple instance of a Max-plus control system, a new approach to control based on nonstandard algebra.12 This approach allows the adaptation rate [controlled by the max gain] to be independent of the queue growth [controlled by the average gain]. Applied to this problem, it results in a simple, implicit control loop where the adaptation to physical constraint changes is automatically handled by the filters representing those constraints. A conventional control system would require multiple loops connected by a complex state machine to accomplish the same result.)</p>
+
+      
+    </div>
+    
+    
+    
+	
+	<div>
+	  
+      <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>请多多指教-------------</div>
+    
+</div>
+
+      
+    </div>
+	
+    
+	
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    Steven Lee
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://coolpad.top/2020/08/27/BBR论文之读后感-三/" title="BBR论文之读后感(三)">http://coolpad.top/2020/08/27/BBR论文之读后感-三/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/08/27/BBR论文之读后感-二/" rel="next" title="BBR论文之读后感(二)">
+                <i class="fa fa-chevron-left"></i> BBR论文之读后感(二)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/08/27/臭名昭著的bufferbloat/" rel="prev" title="臭名昭著的bufferbloat">
+                臭名昭著的bufferbloat <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/background.jpg"
+                alt="Steven Lee" />
+            
+              <p class="site-author-name" itemprop="name">Steven Lee</p>
+              <p class="site-description motion-element" itemprop="description">恍恍惚惚</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">40</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Matching-the-Packet-Flow-to-the-Delivery-Path"><span class="nav-number">1.</span> <span class="nav-text">Matching the Packet Flow to the Delivery Path</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#When-data-is-sent"><span class="nav-number">2.</span> <span class="nav-text">When data is sent</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Steady-state-behavior"><span class="nav-number">3.</span> <span class="nav-text">Steady-state behavior</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Steven Lee</span>
+
+  
+</div>
+
+<div class="powered-by">
+<i class="fa fa-user-md"></i><span id="busuanzi_container_site_uv">
+  本站访客数:<span id="busuanzi_value_site_uv"></span>
+</span>
+</div>
+
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+
+
+<div class="theme-info">
+  <div class="powered-by"></div>
+  <span class="post-count">Steven的博客共89.0k字</span>
+</div>
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'Hsz9zOlrvMN9ry0R9Jfi5ykJ-gzGzoHsz',
+        appKey: 'MAHOS3RIF7wDFRbEeC7kf3Vr',
+        placeholder: '此处输入评论内容',
+        avatar:'wavatar',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
